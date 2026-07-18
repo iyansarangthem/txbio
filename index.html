@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TXBIO — Video Editor Portfolio</title>
+<!--
+  ============================================================
+  HOW TO EDIT THIS FILE
+  ============================================================
+  - Search "EDIT ME" comments to personalize bio/contact text.
+  - Videos are already embedded from your Google Drive links.
+    To add more later, copy a .card block inside the matching
+    section and swap the file ID in the iframe src
+    (drive.google.com/file/d/FILE_ID/preview). Files must be
+    shared as "Anyone with the link".
+  - Host free on GitHub Pages: create a repo named exactly
+    yourusername.github.io, upload this as index.html,
+    enable it under Settings > Pages.
+  ============================================================
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #060606;
+    --bg-card: #121212;
+    --line: #262626;
+    --text: #F2F0EC;
+    --muted: #8C8A85;
+    --red: #E13A2E;
+    --red-dim: #7A1F19;
+    --font-display: 'Anton', sans-serif;
+    --font-body: 'Space Grotesk', sans-serif;
+    --font-mono: 'Space Mono', monospace;
+    --radius: 4px;
+  }
+
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  html{ scroll-behavior:smooth; background:var(--bg); }
+
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--font-body);
+    line-height:1.5;
+    position:relative;
+    overflow-x:hidden;
+  }
+
+  a{ color:inherit; text-decoration:none; }
+  ::selection{ background:var(--red); color:#060606; }
+  :focus-visible{ outline:2px solid var(--red); outline-offset:3px; }
+
+  /* ---------- Grain overlay (signature texture) ---------- */
+  .grain{
+    position:fixed; inset:0; z-index:200; pointer-events:none;
+    opacity:0.05; mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* ---------- Corner streaks (matches reference theme) ---------- */
+  .streak{ position:fixed; pointer-events:none; z-index:1; filter:blur(1px); }
+  .streak.red{
+    top:-60px; left:-140px; width:640px; height:120px;
+    background:linear-gradient(100deg, transparent, rgba(225,58,46,0.55) 40%, rgba(225,58,46,0.2) 55%, transparent 75%);
+    transform:rotate(-14deg);
+  }
+  .streak.green{
+    bottom:-40px; right:-120px; width:520px; height:90px;
+    background:linear-gradient(100deg, transparent, rgba(60,168,90,0.30) 45%, transparent 75%);
+    transform:rotate(-10deg);
+  }
+  .streak.blue{
+    bottom:-90px; right:-60px; width:400px; height:340px;
+    background:linear-gradient(100deg, transparent, rgba(60,90,220,0.22) 45%, transparent 75%);
+    transform:rotate(-16deg);
+  }
+
+  .wrap{ max-width:1180px; margin:0 auto; padding:0 32px; position:relative; z-index:5; }
+
+  /* ---------- Nav ---------- */
+  .topnav{
+    position:sticky; top:0; z-index:50;
+    background:rgba(6,6,6,0.86);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  .topnav .wrap{
+    display:flex; align-items:center; justify-content:space-between;
+    height:66px;
+  }
+  .nav-links{ display:flex; gap:34px; list-style:none; }
+  .nav-links a{
+    font-family:var(--font-body); font-weight:600; font-size:14px;
+    color:var(--text); padding-bottom:4px; border-bottom:2px solid transparent;
+    transition:border-color .2s ease, color .2s ease;
+  }
+  .nav-links a:hover{ border-color:var(--red); color:var(--red); }
+  .nav-icon{ width:20px; height:20px; opacity:0.85; }
+
+  @media (max-width:760px){
+    .nav-links{ gap:16px; font-size:12px; }
+  }
+
+  /* ---------- Hero / profile block ---------- */
+  .hero{ padding:70px 0 60px; text-align:center; position:relative; }
+
+  .hero-logo{
+    font-family:var(--font-display);
+    font-size:clamp(46px, 8vw, 84px);
+    color:var(--red);
+    letter-spacing:1px;
+    transform:skewX(-6deg);
+    text-shadow: 2px 2px 0 rgba(225,58,46,0.25), -1px 3px 6px rgba(0,0,0,0.6);
+    margin-bottom:8px;
+  }
+
+  .hero-tagline{
+    font-family:var(--font-mono);
+    font-size:13px;
+    color:var(--muted);
+    letter-spacing:0.5px;
+  }
+
+  .profile{
+    margin-top:56px;
+    display:flex;
+    align-items:center;
+    gap:34px;
+    text-align:left;
+  }
+  @media (max-width:640px){ .profile{ flex-direction:column; text-align:center; } }
+
+  .avatar{
+    width:150px; height:150px; border-radius:50%;
+    border:2px solid var(--text);
+    display:flex; align-items:center; justify-content:center;
+    flex-shrink:0;
+    background:#0d0d0d;
+    overflow:hidden;
+  }
+  .avatar svg{ width:64px; height:64px; opacity:0.85; }
+
+  .profile h2{
+    font-family:var(--font-display);
+    font-size:30px;
+    letter-spacing:0.5px;
+    margin-bottom:10px;
+  }
+
+  .profile p{
+    font-family:var(--font-mono);
+    font-size:13px;
+    color:var(--muted);
+    max-width:440px;
+    margin-bottom:20px;
+  }
+
+  .btn-follow{
+    display:inline-flex; align-items:center; gap:8px;
+    background:var(--red); color:#0a0a0a;
+    font-weight:700; font-size:13px;
+    padding:11px 22px; border-radius:999px;
+    transition:transform .15s ease, background .15s ease;
+  }
+  .btn-follow:hover{ transform:translateY(-2px); background:#ff4c3c; }
+
+  /* ---------- Section shell ---------- */
+  section{ padding:64px 0; border-top:1px solid var(--line); }
+
+  .sec-head{
+    display:flex; align-items:baseline; justify-content:space-between;
+    margin-bottom:36px; flex-wrap:wrap; gap:10px;
+  }
+
+  .sec-head h3{
+    font-family:var(--font-display);
+    font-size:clamp(24px,3.4vw,36px);
+    letter-spacing:0.5px;
+  }
+
+  .sec-count{
+    font-family:var(--font-mono);
+    font-size:12px;
+    color:var(--red);
+  }
+
+  /* ---------- Card grid ---------- */
+  .grid{
+    display:grid;
+    gap:20px;
+  }
+  .grid.vertical{ grid-template-columns:repeat(auto-fill, minmax(210px,1fr)); }
+  .grid.horizontal{ grid-template-columns:repeat(auto-fill, minmax(300px,1fr)); }
+
+  .card{
+    background:var(--bg-card);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    overflow:hidden;
+    transition:border-color .2s ease, transform .2s ease;
+  }
+  .card:hover{ border-color:var(--red); transform:translateY(-3px); }
+
+  .card iframe{
+    width:100%;
+    border:0;
+    display:block;
+    background:#000;
+  }
+  .ratio-9-16 iframe{ aspect-ratio:9/16; }
+  .ratio-16-9 iframe{ aspect-ratio:16/9; }
+
+  .card-label{
+    padding:12px 14px;
+    font-family:var(--font-mono);
+    font-size:11.5px;
+    color:var(--muted);
+    display:flex; justify-content:space-between; align-items:center;
+    border-top:1px solid var(--line);
+  }
+  .card-label .tag{ color:var(--red); }
+
+  /* ---------- Contact ---------- */
+  .contact-box{
+    background:var(--bg-card);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:44px;
+    display:flex; justify-content:space-between; align-items:center;
+    flex-wrap:wrap; gap:24px;
+  }
+  .contact-box h4{
+    font-family:var(--font-display);
+    font-size:clamp(20px,2.8vw,28px);
+    max-width:420px;
+  }
+  .contact-links{ display:flex; flex-direction:column; gap:14px; }
+  .contact-links a{
+    font-family:var(--font-mono); font-size:13.5px; color:var(--text);
+    display:flex; align-items:center; gap:12px;
+    transition:color .15s ease, opacity .15s ease;
+  }
+  .contact-links a:hover{ color:var(--red); }
+  .contact-links svg{ width:20px; height:20px; flex-shrink:0; }
+
+  footer{
+    padding:32px 0; border-top:1px solid var(--line);
+    font-family:var(--font-mono); font-size:11px; color:var(--muted);
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior:auto; }
+    .card, .btn-follow{ transition:none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="grain"></div>
+<div class="streak red"></div>
+<div class="streak green"></div>
+<div class="streak blue"></div>
+
+<nav class="topnav">
+  <div class="wrap">
+    <img src="Logo_Red.png" alt="TXBIO" style="height:26px; width:auto; display:block;">
+    <ul class="nav-links">
+      <li><a href="#reels">Reels</a></li>
+      <li><a href="#longform">Long-Form</a></li>
+      <li><a href="#ads">Ads</a></li>
+      <li><a href="#edits">Edits</a></li>
+      <li><a href="#gaming">Gaming</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <img src="Logo_Red.png" alt="TXBIO" style="max-width:min(80%, 480px); width:100%; height:auto; margin:0 auto;">
+    <div class="hero-tagline">short-form &amp; long-form video editor — open for client work</div>
+
+    <div class="profile">
+      <div class="avatar">
+        <img src="SpiderNoir.gif" alt="TXBIO profile" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">
+      </div>
+      <div>
+        <h2>TXBIO</h2>
+        <!-- EDIT ME: your bio -->
+        <p>Editing ads, montages, and short-form content for creators and brands. If you have any concerns or want to talk about a project, DM me on Instagram @txbioix.</p>
+        <a class="btn-follow" href="#contact">+ Hire me</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section id="reels">
+  <div class="wrap">
+    <div class="sec-head">
+      <h3>Reels / Shorts</h3>
+      <span class="sec-count">03 files</span>
+    </div>
+    <div class="grid vertical">
+      <div class="card ratio-9-16">
+        <iframe src="https://drive.google.com/file/d/1fAoulRuTbby5aP9wjOEKqawOqxR_aNlz/preview" loading="lazy" allow="autoplay" allowfullscreen></iframe>
+        <div class="card-label"><span>Reel 01</span><span class="tag">SHORT</span></div>
+      </div>
+      <div class="card ratio-9-16">
+        <iframe src="https://drive.google.com/file/d/1tRrFzHo6l-iGrN9byY0sZCLaLu2zELCW/preview" loading="lazy" allow="autoplay" allowfullscreen></iframe>
+        <div class="card-label"><span>Reel 02</span><span class="tag">SHORT</span></div>
+      </div>
+      <div class="card ratio-9-16">
+        <iframe src="https://drive.google.com/file/d/1RZI0Nff0UEaAOL4SepaBdsmgNv867YXE/preview" loading="lazy" allow="autoplay" allowfullscreen></iframe>
+        <div class="card-label"><span>Reel 03</span><span class="tag">SHORT</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="longform">
+  <div class="wrap">
+    <div class="sec-head">
+      <h3>YouTube / Long-Form</h3>
+      <span class="sec-count">02 files</span>
+    </div>
+    <div class="grid horizontal">
+      <div class="card ratio-16-9">
+        <iframe src="https://drive.google.com/file/d/1SqrVhGJln_xBv6jV-Xk8-llRDxPEmg9T/preview" loading="lazy" allow="autoplay" allowfullscreen></iframe>
+        <div class="card-label"><span>Long-form 01</span><span class="tag">YT</span></div>
+      </div>
+      <div class="card ratio-16-9">
+        <iframe src="https://drive.google.com/file/d/1TUGRzj1VbDU19ll4SPeULCuRjodxr3ws/preview" loading="lazy" allow="autoplay" allowfullscreen></iframe>
+        <div class="card-label"><span>Long-form 02</span><span class="tag">YT</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="ads">
+  <div class="wrap">
+    <div class="sec-head">
+      <h3>Ads</h3>
+      <span class="sec-count">01 file</span>
+    </div>
+    <div class="grid horizontal">
+      <div class="card ratio-16-9">
+        <iframe src="https://drive.google.com/file/d/1cSQ6nGuC26RNU6EU2xNe0IgflBwmEn5T/preview" loading="lazy" allow="autoplay" allowfullscreen></iframe>
+        <div class="card-label"><span>Ad spot 01</span><span class="tag">ADS</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="edits">
+  <div class="wrap">
+    <div class="sec-head">
+      <h3>Edits</h3>
+      <span class="sec-count">07 files</span>
+    </div>
+    <div class="grid horizontal">
+      <div class="card ratio-16-9">
+        <iframe src="https://drive.google.com/file/d/1JJy_l15ghpgFIZD-ytn-KatKXX_aeNIh/preview" loading="lazy" allow="autoplay" allowfullscreen></iframe>
+        <div class="card-label"><span>Edit 01</span><span class="tag">EDIT</span></div>
+      </div>
+      <div class="card ratio-16-9">
+        <iframe src="https://drive.google.com/file/d/1KchiabekwHYSnqzNgL9lqSULQ6H4HQ9a/preview" loading="lazy" allow="autoplay" allowfullscreen></iframe>
+        <div class="card-label"><span>Edit 02</span><span class="tag">EDIT</span></div>
+      </div>
+      <div class="card ratio-16-9">
+        <iframe src="https://drive.google.com/file/d/1Rvn8ORywBRv_tpfuk_3S675ASEoeeWTA/preview" loading="lazy" allow="autoplay" allowfullscreen></iframe>
+        <div class="card-label"><span>Edit 03</span><span class="tag">EDIT</span></div>
+      </div>
+      <div class="card ratio-16-9">
+        <iframe src="https://drive.google.com/file/d/1McNsSefW1Q8zpDItWr6YcdeEXgx3byRF/preview" loading="lazy" allow="autoplay" allowfullscreen></iframe>
+        <div class="card-label"><span>Edit 04</span><span class="tag">EDIT</span></div>
+      </div>
+      <div class="card ratio-16-9">
+        <iframe src="https://drive.google.com/file/d/1SFIQxcdzfcZfRhIcj9iNal7yKTy8iZY1/preview" loading="lazy" allow="autoplay" allowfullscreen></iframe>
+        <div class="card-label"><span>Edit 05</span><span class="tag">EDIT</span></div>
+      </div>
+      <div class="card ratio-16-9">
+        <iframe src="https://drive.google.com/file/d/14XWFbZbOvc-98gaI6--uG4fHQCsh7pqB/preview" loading="lazy" allow="autoplay" allowfullscreen></iframe>
+        <div class="card-label"><span>Edit 06</span><span class="tag">EDIT</span></div>
+      </div>
+      <div class="card ratio-16-9">
+        <iframe src="https://drive.google.com/file/d/1az6idN-ug3Lu3YGnaLWqKeAtgEZ6CdU-/preview" loading="lazy" allow="autoplay" allowfullscreen></iframe>
+        <div class="card-label"><span>Edit 07</span><span class="tag">EDIT</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="gaming">
+  <div class="wrap">
+    <div class="sec-head">
+      <h3>Gaming Montage</h3>
+      <span class="sec-count">02 files</span>
+    </div>
+    <div class="grid horizontal">
+      <div class="card ratio-16-9">
+        <iframe src="https://drive.google.com/file/d/1p2pmyZNJ4Vj7I0WN8oOHya2KovEWI8nY/preview" loading="lazy" allow="autoplay" allowfullscreen></iframe>
+        <div class="card-label"><span>Montage 01</span><span class="tag">GAMING</span></div>
+      </div>
+      <div class="card ratio-16-9">
+        <iframe src="https://drive.google.com/file/d/1mfdgtJ43RU1dRh4tanXnSLRcbkPb3JA9/preview" loading="lazy" allow="autoplay" allowfullscreen></iframe>
+        <div class="card-label"><span>Montage 02</span><span class="tag">GAMING</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="wrap">
+    <div class="contact-box">
+      <!-- EDIT ME -->
+      <h4>Got footage that needs a story? Send it over and I'll send back a quote.</h4>
+      <div class="contact-links">
+        <a href="mailto:contactstobie@gmail.com">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2.5" y="5" width="19" height="14" rx="2"/><path d="M3.5 6.5l8.5 7 8.5-7"/></svg>
+          contactstobie@gmail.com
+        </a>
+        <a href="https://www.youtube.com/@txbio" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 12s0-3.4-.44-5.02a2.8 2.8 0 0 0-1.96-1.98C17.94 4.5 12 4.5 12 4.5s-5.94 0-7.6.5a2.8 2.8 0 0 0-1.96 1.98C2 8.6 2 12 2 12s0 3.4.44 5.02a2.8 2.8 0 0 0 1.96 1.98c1.66.5 7.6.5 7.6.5s5.94 0 7.6-.5a2.8 2.8 0 0 0 1.96-1.98C22 15.4 22 12 22 12z"/><path fill="#060606" d="M10 15.5v-7l6 3.5z"/></svg>
+          @txbio
+        </a>
+        <a href="https://www.instagram.com/txbioix" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1.1" fill="currentColor" stroke="none"/></svg>
+          @txbioix
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap" style="display:flex; justify-content:space-between; width:100%; flex-wrap:wrap; gap:8px;">
+    <span>© 2026 TXBIO. All cuts reserved.</span>
+    <span>Video editor for hire</span>
+  </div>
+</footer>
+
+</body>
+</html>
